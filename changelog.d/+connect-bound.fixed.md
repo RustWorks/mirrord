@@ -1,0 +1,1 @@
+Fixed connect hook on bound sockets.
