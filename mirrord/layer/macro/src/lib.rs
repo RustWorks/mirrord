@@ -209,7 +209,8 @@ pub fn instrument(
     let item: proc_macro2::TokenStream = item.into();
 
     let output = quote! {
-        #[cfg_attr(debug_assertions, tracing::instrument(#attr))]
+        // #[cfg_attr(debug_assertions, tracing::instrument(#attr))]
+        #[tracing::instrument(#attr)]
         #item
     };
 
