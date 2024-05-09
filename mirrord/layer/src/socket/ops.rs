@@ -255,12 +255,14 @@ pub(super) fn bind(
     // Check if the user's requested address isn't already in use, even though it's not actually
     // bound, as we bind to a different address, but if we don't check for this then we're
     // changing normal socket behavior (see issue #1123).
-    if SOCKETS.iter().any(|socket| match &socket.state {
-        SocketState::Initialized | SocketState::Connected(_) => false,
-        SocketState::Bound(bound) | SocketState::Listening(bound) => {
-            bound.requested_address == requested_address
-        }
-    }) {
+    if requested_address.port() != 0
+        && SOCKETS.iter().any(|socket| match &socket.state {
+            SocketState::Initialized | SocketState::Connected(_) => false,
+            SocketState::Bound(bound) | SocketState::Listening(bound) => {
+                bound.requested_address == requested_address
+            }
+        })
+    {
         Err(HookError::AddressAlreadyBound(requested_address))?;
     }
 
